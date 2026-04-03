@@ -273,10 +273,20 @@
 
     try {
       await fetch(SHEET_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(entry) });
+      // Reset all fields
+      document.getElementById('entryWho').value='';
       document.getElementById('entryOrderInfo').value='';
       document.getElementById('entryQty').value='';
       document.getElementById('entryBundles').value='';
       document.getElementById('qtyCalc').classList.remove('visible');
+      // Reset bar size
+      document.querySelectorAll('#standardSizes .chip, #epoxySizes .chip').forEach(c=>c.classList.remove('selected'));
+      document.getElementById('bundleSizeChips').innerHTML='';
+      document.getElementById('bundleSizeWrap').classList.remove('visible');
+      document.getElementById('bundlesWrap').classList.remove('visible');
+      selectedSize = null;
+      isEpoxy = false;
+      selectedBundleSize = null;
       document.getElementById('savingOverlay').classList.remove('show');
       showToast('✓ Pull logged to sheet','success');
     } catch(e) {
