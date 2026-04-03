@@ -269,7 +269,8 @@
     }
 
     document.getElementById('savingOverlay').classList.add('show');
-    const entry = { date, who, orderInfo: orderInfo||'—', size: selectedSize, bundles: isEpoxy?0:bundles, bundleSize: isEpoxy?0:(selectedBundleSize||0), qty };
+    const usedBundles = !isEpoxy && bundles > 0;
+    const entry = { date, who, orderInfo: orderInfo||'—', size: selectedSize, bundleSize: usedBundles ? (selectedBundleSize||'') : '', bundles: usedBundles ? bundles : '', qty };
 
     try {
       await fetch(SHEET_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(entry) });
