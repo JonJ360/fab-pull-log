@@ -24,25 +24,31 @@
   .form-group { display: flex; flex-direction: column; gap: 6px; }
   .form-group.full { grid-column: 1 / -1; }
   label { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: #555; }
-  input, select { background: #f8f9fb; border: 2px solid #d0d5dd; border-radius: 4px; color: #1a1a1a; font-family: 'Barlow', sans-serif; font-size: 1.1rem; font-weight: 500; padding: 14px 16px; outline: none; transition: border-color 0.15s; width: 100%; -webkit-appearance: none; }
-  input:focus, select:focus { border-color: #1a3a6b; }
-  select option { background: #fff; }
+  input { background: #f8f9fb; border: 2px solid #d0d5dd; border-radius: 4px; color: #1a1a1a; font-family: 'Barlow', sans-serif; font-size: 1.1rem; font-weight: 500; padding: 14px 16px; outline: none; transition: border-color 0.15s; width: 100%; -webkit-appearance: none; }
+  input:focus { border-color: #1a3a6b; }
   .chip-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
-  .chip { background: #f0f2f5; border: 2px solid #d0d5dd; border-radius: 4px; color: #555; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.9rem; padding: 10px 16px; cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; transition: all 0.15s; }
+  .chip { background: #f0f2f5; border: 2px solid #d0d5dd; border-radius: 4px; color: #555; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; padding: 12px 18px; cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; transition: all 0.15s; }
   .chip.selected { border-color: #1a3a6b; color: #1a3a6b; background: #e8eef7; }
+  .chip.epoxy { border-color: #b0bec5; color: #37474f; background: #eceff1; }
+  .chip.epoxy.selected { border-color: #2e7d32; color: #2e7d32; background: #e8f5e9; }
   .job-chip { flex: 1; text-align: center; font-size: 1.1rem; padding: 16px 20px; }
+  .row-label { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em; color: #888; margin-top: 10px; margin-bottom: 2px; }
   .job-name-wrap { margin-top: 10px; overflow: hidden; max-height: 0; opacity: 0; transition: max-height 0.25s ease, opacity 0.2s ease; }
   .job-name-wrap.visible { max-height: 80px; opacity: 1; }
   .optional-tag { font-size: 0.75rem; color: #888; font-weight: 400; text-transform: none; letter-spacing: 0; margin-left: 6px; }
+  .qty-block { margin-top: 6px; display: flex; flex-direction: column; gap: 14px; }
+  .slide-wrap { overflow: hidden; max-height: 0; opacity: 0; transition: max-height 0.3s ease, opacity 0.25s ease; }
+  .slide-wrap.visible { max-height: 200px; opacity: 1; }
+  .qty-calc { background: #e8eef7; border: 1px solid #1a3a6b; border-radius: 4px; padding: 10px 14px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; color: #1a3a6b; text-align: center; display: none; }
+  .qty-calc.visible { display: block; }
   .submit-btn { display: block; width: 100%; margin-top: 20px; padding: 22px; background: #1a3a6b; color: #ffffff; border: none; border-radius: 6px; font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 0.12em; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background 0.15s; }
   .submit-btn:hover { background: #142d55; }
   .submit-btn:active { background: #0f2040; }
   .error-msg { background: #e04040; color: #fff; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; padding: 10px 16px; border-radius: 4px; margin-top: 12px; display: none; }
-  .field-error { border-color: #e04040 !important; }
   .saving-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(26,58,107,0.85); z-index: 998; align-items: center; justify-content: center; flex-direction: column; gap: 16px; }
   .saving-overlay.show { display: flex; }
-  .saving-text { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.4rem; text-transform: uppercase; letter-spacing: 0.1em; color: #ffffff; }
-  .spinner { width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.3); border-top-color: #ffffff; border-radius: 50%; animation: spin 0.8s linear infinite; }
+  .saving-text { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.4rem; text-transform: uppercase; letter-spacing: 0.1em; color: #fff; }
+  .spinner { width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px); font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1rem; text-transform: uppercase; padding: 14px 28px; border-radius: 4px; transition: transform 0.3s ease; z-index: 999; pointer-events: none; }
   .toast.show { transform: translateX(-50%) translateY(0); }
@@ -51,7 +57,6 @@
   .info-box { background: #e8eef7; border: 1px solid #1a3a6b; border-left: 4px solid #1a3a6b; border-radius: 4px; padding: 14px 16px; font-size: 0.9rem; color: #333; line-height: 1.6; margin-bottom: 20px; }
   .info-box strong { color: #1a3a6b; }
   .sheet-btn { display: block; width: 100%; padding: 18px; background: #1a3a6b; color: #fff; border: none; border-radius: 6px; font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.1em; text-align: center; text-decoration: none; }
-  .sheet-btn:hover { background: #142d55; }
 </style>
 </head>
 <body>
@@ -73,11 +78,11 @@
 </div>
 
 <div class="content">
-
   <div id="pane-log">
     <div class="form-card">
       <div class="form-card-title">New Pull Entry</div>
       <div class="form-grid">
+
         <div class="form-group">
           <label>Date</label>
           <input type="date" id="entryDate">
@@ -86,6 +91,7 @@
           <label>Pulled By</label>
           <input type="text" id="entryWho" placeholder="Name" autocomplete="off">
         </div>
+
         <div class="form-group full">
           <label>Pulling For</label>
           <div class="chip-row">
@@ -97,25 +103,52 @@
             <input type="text" id="entryJobName" placeholder="Job name or number" autocomplete="off">
           </div>
         </div>
+
         <div class="form-group full">
-          <label>Bar Size <span style="color:#888;font-weight:400;text-transform:none;letter-spacing:0;font-size:0.75rem;margin-left:4px;">— stays selected between entries</span></label>
-          <div class="chip-row" id="sizeOptions">
-            <div class="chip" onclick="selectSize(this,'#3')">#3</div>
-            <div class="chip" onclick="selectSize(this,'#4')">#4</div>
-            <div class="chip" onclick="selectSize(this,'#5')">#5</div>
-            <div class="chip" onclick="selectSize(this,'#6')">#6</div>
-            <div class="chip" onclick="selectSize(this,'#7')">#7</div>
-            <div class="chip" onclick="selectSize(this,'#8')">#8</div>
-            <div class="chip" onclick="selectSize(this,'#9')">#9</div>
-            <div class="chip" onclick="selectSize(this,'#10')">#10</div>
-            <div class="chip" onclick="selectSize(this,'Other')">Other</div>
+          <label>Bar Size</label>
+          <div class="row-label">Standard</div>
+          <div class="chip-row" id="standardSizes">
+            <div class="chip" onclick="selectSize(this,'#3',false)">#3</div>
+            <div class="chip" onclick="selectSize(this,'#4',false)">#4</div>
+            <div class="chip" onclick="selectSize(this,'#5',false)">#5</div>
+            <div class="chip" onclick="selectSize(this,'#6',false)">#6</div>
+            <div class="chip" onclick="selectSize(this,'#7',false)">#7</div>
+            <div class="chip" onclick="selectSize(this,'#8',false)">#8</div>
           </div>
-          <input type="text" id="entrySize" placeholder="Or type size manually" style="margin-top:10px;" autocomplete="off">
+          <div class="row-label" style="margin-top:14px;">Epoxy</div>
+          <div class="chip-row" id="epoxySizes">
+            <div class="chip epoxy" onclick="selectSize(this,'#3 Epoxy',true)">#3 Epoxy</div>
+            <div class="chip epoxy" onclick="selectSize(this,'#4 Epoxy',true)">#4 Epoxy</div>
+            <div class="chip epoxy" onclick="selectSize(this,'#5 Epoxy',true)">#5 Epoxy</div>
+          </div>
         </div>
+
         <div class="form-group full">
-          <label>Quantity (Pieces)</label>
-          <input type="number" id="entryQty" placeholder="0" min="1" inputmode="numeric" style="font-size:1.6rem;font-weight:700;text-align:center;">
+          <label>Quantity</label>
+          <div class="qty-block">
+
+            <!-- Bundle size — shows for all standard, auto-selected except #4 -->
+            <div class="slide-wrap" id="bundleSizeWrap">
+              <label>Bundle Size</label>
+              <div class="chip-row" id="bundleSizeChips"></div>
+            </div>
+
+            <!-- Number of bundles — standard only -->
+            <div class="slide-wrap" id="bundlesWrap">
+              <label>Number of Bundles</label>
+              <input type="number" id="entryBundles" placeholder="0" min="0" inputmode="numeric" style="font-size:1.4rem;font-weight:700;text-align:center;" oninput="calcFromBundles()">
+            </div>
+
+            <!-- Pieces — always shown -->
+            <div>
+              <label>Pieces</label>
+              <input type="number" id="entryQty" placeholder="0" min="0" inputmode="numeric" style="font-size:1.4rem;font-weight:700;text-align:center;" oninput="clearBundles()">
+            </div>
+
+            <div class="qty-calc" id="qtyCalc"></div>
+          </div>
         </div>
+
       </div>
       <div class="error-msg" id="errorMsg"></div>
       <button class="submit-btn" onclick="submitEntry()">✓ LOG THIS PULL</button>
@@ -129,24 +162,25 @@
     <div class="form-card">
       <div class="form-card-title">View Live Data</div>
       <p style="color:#555;font-size:0.95rem;margin-bottom:16px;">All pull entries go directly into the shared Google Sheet in real time.</p>
-      <a href="https://docs.google.com/spreadsheets/d/11mbD-uN3LFNtG4S9Dhl7VdQa4DYe-kF8E3R2EoLJ2kg/edit" target="_blank" class="sheet-btn">
-        📊 Open Google Sheet →
-      </a>
+      <a href="https://docs.google.com/spreadsheets/d/11mbD-uN3LFNtG4S9Dhl7VdQa4DYe-kF8E3R2EoLJ2kg/edit" target="_blank" class="sheet-btn">📊 Open Google Sheet →</a>
     </div>
   </div>
-
 </div>
 
 <div class="saving-overlay" id="savingOverlay">
   <div class="spinner"></div>
   <div class="saving-text">Saving Pull...</div>
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script>
   const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwBZVOhU78UV90mpC7OYEebDFLF9CSLBtu59-W28d752S5zZP-D2zUzLx-q95ckPl8Vug/exec';
+  const PCS_PER_BUNDLE = { '#3':266, '#4':null, '#5':96, '#6':68, '#7':49, '#8':38 };
+
   let selectedJobType = null;
+  let selectedSize = null;
+  let isEpoxy = false;
+  let selectedBundleSize = null;
 
   function init() {
     const today = new Date();
@@ -162,64 +196,120 @@
     if(type==='Job'){wrap.classList.add('visible');}else{wrap.classList.remove('visible');document.getElementById('entryJobName').value='';}
   }
 
-  function selectSize(el, val) {
-    document.querySelectorAll('#sizeOptions .chip').forEach(c=>c.classList.remove('selected'));
+  function selectSize(el, size, epoxy) {
+    document.querySelectorAll('#standardSizes .chip, #epoxySizes .chip').forEach(c=>c.classList.remove('selected'));
     el.classList.add('selected');
-    document.getElementById('entrySize').value = val;
-    document.getElementById('entrySize').classList.remove('field-error');
+    selectedSize = size;
+    isEpoxy = epoxy;
+    selectedBundleSize = null;
+
+    document.getElementById('entryBundles').value = '';
+    document.getElementById('entryQty').value = '';
+    document.getElementById('qtyCalc').classList.remove('visible');
+
+    if(epoxy) {
+      document.getElementById('bundleSizeWrap').classList.remove('visible');
+      document.getElementById('bundlesWrap').classList.remove('visible');
+    } else {
+      // Build bundle size chips
+      const container = document.getElementById('bundleSizeChips');
+      container.innerHTML = '';
+
+      if(size === '#4') {
+        // Two options for #4
+        [150, 164].forEach(n => {
+          const c = document.createElement('div');
+          c.className = 'chip';
+          c.style.cssText = 'flex:1;text-align:center;';
+          c.textContent = n + ' pcs';
+          c.onclick = () => selectBundleSize(c, n);
+          container.appendChild(c);
+        });
+      } else {
+        // Single option pre-selected
+        const pcs = PCS_PER_BUNDLE[size];
+        const c = document.createElement('div');
+        c.className = 'chip selected';
+        c.style.cssText = 'flex:1;text-align:center;';
+        c.textContent = pcs + ' pcs';
+        c.onclick = () => selectBundleSize(c, pcs);
+        container.appendChild(c);
+        selectedBundleSize = pcs;
+      }
+
+      document.getElementById('bundleSizeWrap').classList.add('visible');
+      document.getElementById('bundlesWrap').classList.add('visible');
+    }
+  }
+
+  function selectBundleSize(el, size) {
+    document.querySelectorAll('#bundleSizeChips .chip').forEach(c=>c.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedBundleSize = size;
+    calcFromBundles();
+  }
+
+  function calcFromBundles() {
+    if(isEpoxy || !selectedSize || !selectedBundleSize) return;
+    const bundles = parseInt(document.getElementById('entryBundles').value) || 0;
+    const totalPcs = bundles * selectedBundleSize;
+    document.getElementById('entryQty').value = totalPcs || '';
+    const calc = document.getElementById('qtyCalc');
+    if(bundles > 0) {
+      calc.textContent = bundles + ' bundles × ' + selectedBundleSize + ' pcs = ' + totalPcs + ' pieces';
+      calc.classList.add('visible');
+    } else {
+      calc.classList.remove('visible');
+    }
+  }
+
+  function clearBundles() {
+    if(!isEpoxy) {
+      document.getElementById('entryBundles').value = '';
+      document.getElementById('qtyCalc').classList.remove('visible');
+    }
   }
 
   async function submitEntry() {
-    ['entryWho','entrySize','entryQty'].forEach(id=>document.getElementById(id).classList.remove('field-error'));
     document.getElementById('errorMsg').style.display='none';
     const date    = document.getElementById('entryDate').value;
     const who     = document.getElementById('entryWho').value.trim();
-    const size    = document.getElementById('entrySize').value.trim();
     const qty     = parseInt(document.getElementById('entryQty').value);
+    const bundles = parseInt(document.getElementById('entryBundles').value) || 0;
     const jobName = document.getElementById('entryJobName').value.trim();
+
     let errors = [];
-    if(!who)  { document.getElementById('entryWho').classList.add('field-error'); errors.push('name'); }
+    if(!who)             errors.push('name');
     if(!selectedJobType) errors.push('FAB or Job');
-    if(!size) { document.getElementById('entrySize').classList.add('field-error'); errors.push('bar size'); }
-    if(!qty||qty<1) { document.getElementById('entryQty').classList.add('field-error'); errors.push('quantity'); }
+    if(!selectedSize)    errors.push('bar size');
+    if(!qty||qty<1)      errors.push('quantity');
+
     if(errors.length) {
       const m = document.getElementById('errorMsg');
       m.textContent = '⚠ Missing: ' + errors.join(', ');
       m.style.display = 'block';
       return;
     }
+
     document.getElementById('savingOverlay').classList.add('show');
-    const entry = { date, who, jobType: selectedJobType, jobName: selectedJobType==='Job'?(jobName||'—'):'', size, qty };
+    const entry = { date, who, jobType: selectedJobType, jobName: selectedJobType==='Job'?(jobName||'—'):'', size: selectedSize, bundles: isEpoxy?0:bundles, bundleSize: isEpoxy?0:(selectedBundleSize||0), qty };
+
     try {
-      await fetch(SHEET_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(entry)
-      });
-      document.getElementById('entryJobName').value = '';
-      document.getElementById('entryQty').value = '';
+      await fetch(SHEET_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(entry) });
+      document.getElementById('entryJobName').value='';
+      document.getElementById('entryQty').value='';
+      document.getElementById('entryBundles').value='';
+      document.getElementById('qtyCalc').classList.remove('visible');
       document.getElementById('savingOverlay').classList.remove('show');
-      showToast('✓ Pull logged to sheet', 'success');
+      showToast('✓ Pull logged to sheet','success');
     } catch(e) {
       document.getElementById('savingOverlay').classList.remove('show');
-      showToast('⚠ Error saving — check connection', 'error');
+      showToast('⚠ Error saving — check connection','error');
     }
   }
 
-  function showToast(msg, type) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = 'toast ' + type + ' show';
-    setTimeout(() => t.classList.remove('show'), 3000);
-  }
-
-  function switchTab(name) {
-    ['log','billing'].forEach(t => {
-      document.getElementById('pane-'+t).style.display = t===name ? '' : 'none';
-      document.getElementById('tab-'+t).classList.toggle('active', t===name);
-    });
-  }
+  function showToast(msg,type){const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+type+' show';setTimeout(()=>t.classList.remove('show'),3000);}
+  function switchTab(name){['log','billing'].forEach(t=>{document.getElementById('pane-'+t).style.display=t===name?'':'none';document.getElementById('tab-'+t).classList.toggle('active',t===name);});}
 
   init();
 </script>
