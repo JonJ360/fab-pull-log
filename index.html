@@ -24,6 +24,7 @@
   .form-group { display: flex; flex-direction: column; gap: 6px; }
   .form-group.full { grid-column: 1 / -1; }
   label { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: #555; }
+  .optional-tag { font-size: 0.75rem; color: #888; font-weight: 400; text-transform: none; letter-spacing: 0; margin-left: 6px; }
   input { background: #f8f9fb; border: 2px solid #d0d5dd; border-radius: 4px; color: #1a1a1a; font-family: 'Barlow', sans-serif; font-size: 1.1rem; font-weight: 500; padding: 14px 16px; outline: none; transition: border-color 0.15s; width: 100%; -webkit-appearance: none; }
   input:focus { border-color: #1a3a6b; }
   .chip-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
@@ -31,11 +32,7 @@
   .chip.selected { border-color: #1a3a6b; color: #1a3a6b; background: #e8eef7; }
   .chip.epoxy { border-color: #b0bec5; color: #37474f; background: #eceff1; }
   .chip.epoxy.selected { border-color: #2e7d32; color: #2e7d32; background: #e8f5e9; }
-  .job-chip { flex: 1; text-align: center; font-size: 1.1rem; padding: 16px 20px; }
   .row-label { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em; color: #888; margin-top: 10px; margin-bottom: 2px; }
-  .job-name-wrap { margin-top: 10px; overflow: hidden; max-height: 0; opacity: 0; transition: max-height 0.25s ease, opacity 0.2s ease; }
-  .job-name-wrap.visible { max-height: 80px; opacity: 1; }
-  .optional-tag { font-size: 0.75rem; color: #888; font-weight: 400; text-transform: none; letter-spacing: 0; margin-left: 6px; }
   .qty-block { margin-top: 6px; display: flex; flex-direction: column; gap: 14px; }
   .slide-wrap { overflow: hidden; max-height: 0; opacity: 0; transition: max-height 0.3s ease, opacity 0.25s ease; }
   .slide-wrap.visible { max-height: 200px; opacity: 1; }
@@ -92,18 +89,13 @@
           <input type="text" id="entryWho" placeholder="Name" autocomplete="off">
         </div>
 
+        <!-- ORDER INFO — always visible, always optional -->
         <div class="form-group full">
-          <label>Pulling For</label>
-          <div class="chip-row">
-            <div class="chip job-chip" id="chipFab" onclick="selectJobType('FAB')">FAB</div>
-            <div class="chip job-chip" id="chipJob" onclick="selectJobType('Job')">Job</div>
-          </div>
-          <div class="job-name-wrap" id="jobNameWrap">
-            <label style="margin-top:10px;display:block;">Job / Work Order <span class="optional-tag">— optional</span></label>
-            <input type="text" id="entryJobName" placeholder="Job name or number" autocomplete="off">
-          </div>
+          <label>Order Info <span class="optional-tag">— optional</span></label>
+          <input type="text" id="entryOrderInfo" placeholder="Order number, job name, or notes" autocomplete="off">
         </div>
 
+        <!-- BAR SIZE -->
         <div class="form-group full">
           <label>Bar Size</label>
           <div class="row-label">Standard</div>
@@ -123,23 +115,21 @@
           </div>
         </div>
 
+        <!-- QUANTITY -->
         <div class="form-group full">
           <label>Quantity</label>
           <div class="qty-block">
 
-            <!-- Bundle size — shows for all standard, auto-selected except #4 -->
             <div class="slide-wrap" id="bundleSizeWrap">
               <label>Bundle Size</label>
               <div class="chip-row" id="bundleSizeChips"></div>
             </div>
 
-            <!-- Number of bundles — standard only -->
             <div class="slide-wrap" id="bundlesWrap">
               <label>Number of Bundles</label>
               <input type="number" id="entryBundles" placeholder="0" min="0" inputmode="numeric" style="font-size:1.4rem;font-weight:700;text-align:center;" oninput="calcFromBundles()">
             </div>
 
-            <!-- Pieces — always shown -->
             <div>
               <label>Pieces</label>
               <input type="number" id="entryQty" placeholder="0" min="0" inputmode="numeric" style="font-size:1.4rem;font-weight:700;text-align:center;" oninput="clearBundles()">
@@ -177,7 +167,6 @@
   const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwBZVOhU78UV90mpC7OYEebDFLF9CSLBtu59-W28d752S5zZP-D2zUzLx-q95ckPl8Vug/exec';
   const PCS_PER_BUNDLE = { '#3':266, '#4':null, '#5':96, '#6':68, '#7':49, '#8':38 };
 
-  let selectedJobType = null;
   let selectedSize = null;
   let isEpoxy = false;
   let selectedBundleSize = null;
@@ -186,14 +175,6 @@
     const today = new Date();
     document.getElementById('headerDate').textContent = today.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
     document.getElementById('entryDate').value = today.toISOString().split('T')[0];
-  }
-
-  function selectJobType(type) {
-    selectedJobType = type;
-    document.getElementById('chipFab').classList.toggle('selected', type==='FAB');
-    document.getElementById('chipJob').classList.toggle('selected', type==='Job');
-    const wrap = document.getElementById('jobNameWrap');
-    if(type==='Job'){wrap.classList.add('visible');}else{wrap.classList.remove('visible');document.getElementById('entryJobName').value='';}
   }
 
   function selectSize(el, size, epoxy) {
@@ -211,12 +192,10 @@
       document.getElementById('bundleSizeWrap').classList.remove('visible');
       document.getElementById('bundlesWrap').classList.remove('visible');
     } else {
-      // Build bundle size chips
       const container = document.getElementById('bundleSizeChips');
       container.innerHTML = '';
 
       if(size === '#4') {
-        // Two options for #4
         [150, 164].forEach(n => {
           const c = document.createElement('div');
           c.className = 'chip';
@@ -226,7 +205,6 @@
           container.appendChild(c);
         });
       } else {
-        // Single option pre-selected
         const pcs = PCS_PER_BUNDLE[size];
         const c = document.createElement('div');
         c.className = 'chip selected';
@@ -272,17 +250,16 @@
 
   async function submitEntry() {
     document.getElementById('errorMsg').style.display='none';
-    const date    = document.getElementById('entryDate').value;
-    const who     = document.getElementById('entryWho').value.trim();
-    const qty     = parseInt(document.getElementById('entryQty').value);
-    const bundles = parseInt(document.getElementById('entryBundles').value) || 0;
-    const jobName = document.getElementById('entryJobName').value.trim();
+    const date      = document.getElementById('entryDate').value;
+    const who       = document.getElementById('entryWho').value.trim();
+    const orderInfo = document.getElementById('entryOrderInfo').value.trim();
+    const qty       = parseInt(document.getElementById('entryQty').value);
+    const bundles   = parseInt(document.getElementById('entryBundles').value) || 0;
 
     let errors = [];
-    if(!who)             errors.push('name');
-    if(!selectedJobType) errors.push('FAB or Job');
-    if(!selectedSize)    errors.push('bar size');
-    if(!qty||qty<1)      errors.push('quantity');
+    if(!who)          errors.push('name');
+    if(!selectedSize) errors.push('bar size');
+    if(!qty||qty<1)   errors.push('quantity');
 
     if(errors.length) {
       const m = document.getElementById('errorMsg');
@@ -292,11 +269,11 @@
     }
 
     document.getElementById('savingOverlay').classList.add('show');
-    const entry = { date, who, jobType: selectedJobType, jobName: selectedJobType==='Job'?(jobName||'—'):'', size: selectedSize, bundles: isEpoxy?0:bundles, bundleSize: isEpoxy?0:(selectedBundleSize||0), qty };
+    const entry = { date, who, orderInfo: orderInfo||'—', size: selectedSize, bundles: isEpoxy?0:bundles, bundleSize: isEpoxy?0:(selectedBundleSize||0), qty };
 
     try {
       await fetch(SHEET_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(entry) });
-      document.getElementById('entryJobName').value='';
+      document.getElementById('entryOrderInfo').value='';
       document.getElementById('entryQty').value='';
       document.getElementById('entryBundles').value='';
       document.getElementById('qtyCalc').classList.remove('visible');
